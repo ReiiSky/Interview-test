@@ -10,7 +10,7 @@ function validateS(S = String()) {
     let result = -1;
     if(!Number.isNaN(parsed)) {
         let n = (parsed + 1) / 4;
-        if(Number.isInteger(n) && n >= 3) {
+        if(Number.isInteger(n) && n >= 1) {
             result = parsed;
         }   
     }
