@@ -1,5 +1,11 @@
 function main() {
     const readline = require('readline-sync').question;
+    const nextMove = [
+        [ 1,  0],
+        [ 0,  1],
+        [-1,  0],
+        [ 0, -1]
+    ];
 
     let playerObject = createObject(1, 0);
     let S = validateS(readline("Masukan S: "));
@@ -7,9 +13,21 @@ function main() {
         console.log("Please input the correct S!!")
         return;
     }
-
-    
     let mazeArray = generateMazeByS(S);
+    let move = getNextMove(nextMove, 0);
+}
+
+
+function drawMazeByPattern() {
+
+}
+
+function getNextMove(move = [], lastMove = 0) {
+    if(Number.isInteger(lastMove)) {
+        return move[lastMove];
+    } else if (Array.isArray(lastMove)) {
+        return move[(move.indexOf(lastMove) + 1) % move.length];
+    }
 }
 
 function generateMazeByS(S = Number){
