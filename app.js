@@ -7,7 +7,7 @@ function main() {
         [ 0, -1]
     ];
 
-    let playerObject = createObject(1, 0);
+    let playerObject = createObject(1, -1);
     let S = validateS(readline("Masukan S: "));
     if(S == -1) {
         console.log("Please input the correct S!!")
@@ -15,11 +15,54 @@ function main() {
     }
     let mazeArray = generateMazeByS(S);
     let move = getNextMove(nextMove, 0);
+    drawMazeByPattern(playerObject, mazeArray, nextMove, move);
 }
 
 
-function drawMazeByPattern() {
+function drawMazeByPattern(player = {}, maze = [[String]], movePossibility = [[Number]], move = [Number]) {
+    let status = turnAround(player, maze, move);
+    if(status == -1) {
+        printMaze(maze);
+        return;
+    } else {
+        if(status == 1) {
+            move = getNextMove(movePossibility, move);
+        } else {
+            player.x += move[1];
+            player.y += move[0];
+            maze[player.y][player.x] = " ";
+        }
+        drawMazeByPattern(player, maze, movePossibility, move);
+    }
+}
 
+function turnAround(player = {}, maze = [[String]], move = [Number]) {
+    let center = parseInt(maze.length / 2) + 1;
+    if(maze[center][center] != " ") {
+        let nextStatus;
+        let doubleNextStatus;
+
+        if(move[1] == 0 && move[0] != 0) {
+            nextStatus       = maze[player.y+move[0]][player.x];
+            doubleNextStatus = maze[player.y+move[0] * 2] != undefined 
+                               ? maze[player.y+move[0] * 2][player.x] : " ";
+        } else if(move[1] != 0 && move[0] == 0) {
+            nextStatus       = maze[player.y][player.x+move[1]];
+            doubleNextStatus = maze[player.y][player.x+move[1]*2] || " ";
+        }
+        if(nextStatus == "@" && doubleNextStatus == "@") {
+            return 0;
+        } else if(nextStatus == "@" && doubleNextStatus == " ") {
+            return 1;
+        }
+    } 
+    return -1;
+}
+
+function printMaze(maze = [[String]]) {
+    for(let i = 0; i< maze.length; ++i) {
+        console.log(maze[i].join(""));
+    }
 }
 
 function getNextMove(move = [], lastMove = 0) {
