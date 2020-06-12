@@ -3,6 +3,21 @@ function main() {
 
     let playerObject = createObject(1, 0);
     let S = validateS(readline("Masukan S: "));
+    if(S == -1) {
+        console.log("Please input the correct S!!")
+        return;
+    }
+
+    
+    let mazeArray = generateMazeByS(S);
+}
+
+function generateMazeByS(S = Number){
+    let maze = [];
+    for(let i = 0; i< S; ++i) {
+        maze.push(Array(S).fill("@"));
+    }
+    return maze;
 }
 
 function validateS(S = String()) {
